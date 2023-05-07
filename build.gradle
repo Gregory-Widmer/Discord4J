@@ -179,7 +179,7 @@ subprojects {
         if (!isJitpack) {
             repositories {
                 maven {
-                    url 'https://nexus.klutometis.net/repository/maven-snapshots'
+                    url 'https://nexus.klutometis.net/repository/maven-releases'
                     def sonatypeUsername = System.getProperty("CI_USERNAME")
                     def sonatypePassword = System.getProperty("CI_PASSWORD")
                     if (sonatypeUsername != null && sonatypePassword != null) {
@@ -193,16 +193,6 @@ subprojects {
         }
     }
 
-    if (!isJitpack && isRelease) {
-        signing {
-            def signingKey = findProperty("signingKey")
-            def signingPassword = findProperty("signingPassword")
-            if (signingKey != null && signingPassword != null) {
-                useInMemoryPgpKeys(new String(signingKey.decodeBase64()), signingPassword as String)
-            }
-            sign publishing.publications.mavenJava
-        }
-    }
 }
 
 def buildDocsUrl(String project) {
