@@ -71,6 +71,7 @@ allprojects {
             maven { url 'https://oss.sonatype.org/content/repositories/staging' }
         }
         maven { url 'https://m2.dv8tion.net/releases' }
+        maven { url 'https://nexus.klutometis.net/repository/maven-public' }
     }
 
     configurations.all {
@@ -178,13 +179,9 @@ subprojects {
         if (!isJitpack) {
             repositories {
                 maven {
-                    if (isRelease) {
-                        url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-                    } else {
-                        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-                    }
-                    def sonatypeUsername = findProperty('sonatypeUsername')
-                    def sonatypePassword = findProperty('sonatypePassword')
+                    url 'https://nexus.klutometis.net/repository/maven-snapshots'
+                    def sonatypeUsername = System.getProperty("CI_USERNAME")
+                    def sonatypePassword = System.getProperty("CI_PASSWORD")
                     if (sonatypeUsername != null && sonatypePassword != null) {
                         credentials {
                             username sonatypeUsername
