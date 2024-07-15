@@ -21,6 +21,7 @@ import discord4j.common.annotations.Experimental;
 import discord4j.common.util.Snowflake;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.DiscordObject;
+import discord4j.core.object.entity.AvatarDecoration;
 import discord4j.core.object.entity.Member;
 import discord4j.core.retriever.EntityRetrievalStrategy;
 import discord4j.discordjson.json.ResolvedMemberData;
@@ -91,6 +92,15 @@ public class ResolvedMember implements DiscordObject {
      */
     public Snowflake getId() {
         return Snowflake.of(user.id());
+    }
+
+    /**
+     * Gets the avatar hash of this member, if provided.
+     *
+     * @return The avatar hash, if present.
+     */
+    public Optional<String> getAvatar() {
+        return Possible.flatOpt(data.avatar());
     }
 
     /**
@@ -190,6 +200,16 @@ public class ResolvedMember implements DiscordObject {
      */
     public Mono<Member> asFullMember(EntityRetrievalStrategy retrievalStrategy) {
         return gateway.withRetrievalStrategy(retrievalStrategy).getMemberById(getGuildId(), getId());
+    }
+
+    /**
+     * Gets the user avatar decoration, if present.
+     *
+     * @return The user avatar decoration, if present.
+     */
+    public Optional<AvatarDecoration> getAvatarDecoration() {
+        return Possible.flatOpt(data.avatarDecoration())
+            .map(data -> new AvatarDecoration(this.getClient(), data));
     }
 
     @Override
